@@ -54,6 +54,8 @@ Language:
 
 __Спасибо за внимание!__
 
+<a id='en_doc'></a>
+
 ### Documentation
 
 ***
@@ -70,7 +72,6 @@ The next choice concerns the parsing method .
 There are two ways: parse the entire menu into one file or each category
 into a separate file.
 
-<a id='en_doc'></a>
 
 ![lang_ru](images/readme/scrap_ru.png)
 
