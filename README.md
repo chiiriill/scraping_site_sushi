@@ -1,6 +1,7 @@
+<a id='anchor'></a>
+
 # Scraping site sushidom
 
-<a id='anchor'></a>
 Language:
 
 * [RU](#ru_doc)
@@ -71,7 +72,6 @@ main language by default.
 The next choice concerns the parsing method .
 There are two ways: parse the entire menu into one file or each category
 into a separate file.
-
 
 ![lang_ru](images/readme/scrap_ru.png)
 
