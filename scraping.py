@@ -1,4 +1,3 @@
-import random
 import time
 import requests
 from bs4 import BeautifulSoup
@@ -8,8 +7,8 @@ from art import *
 from fake_useragent import UserAgent
 
 HEADERS = {
-    'user-agent': UserAgent().random,
-    'accept': '*/*'
+    'accept': '*/*',
+    'user-agent': UserAgent().random
 }
 
 LANGUAGES = {
@@ -53,7 +52,7 @@ def create_dir(type_parser):
 
 def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
     for page in range(1, amount_pages + 1):
-        url = f'{url}page/{page}'
+        url = f'{url.split("page")[0]}page/{page}'
         site = requests.get(url=url, headers=HEADERS)
         soup = BeautifulSoup(site.text, 'lxml')
         products = soup.find_all('div', class_='shop-cards')
@@ -64,9 +63,9 @@ def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
                 name = 'Нет названия'
 
             try:
-                url = product.find('h5').find('a').get('href')
+                url_product = product.find('h5').find('a').get('href')
             except Exception:
-                url = 'Нет url'
+                url_product = 'Нет url'
 
             try:
                 compounds = ''
@@ -93,18 +92,17 @@ def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
                         name.strip(),
                         compounds.strip(),
                         price.strip(),
-                        url.strip(),
+                        url_product.strip(),
                     )
                 )
-        time.sleep(random.randint(2, 4))
         print(f'\033[32m[+] page {page}/{amount_pages} DONE!')
 
 
 def info(func):
-    def inner(*args, **kwargs):
+    def inner(url, type_parser):
         print(f'\033[35m{LANGUAGES[lang]["start_process"]}')
         start_time = time.time()
-        func(*args, **kwargs)
+        func(url, type_parser)
         end_time = time.time()
         print(f'\033[35m{LANGUAGES[lang]["process_finished"]}')
         print(f'\033[35m{LANGUAGES[lang]["info_about_process"]}')
@@ -148,11 +146,11 @@ def menu_by_category(url, type_parser):
 
 @info
 def all_menu(url, type_parser):
-    create_dir(type_parser)
-
     site = requests.get(url=url, headers=HEADERS)
     soup = BeautifulSoup(site.text, 'lxml')
     amount_pages = int(soup.find_all('a', class_='page-numbers')[-2].text)
+
+    create_dir(type_parser)
 
     with open(f'data/{type_parser}/{type_parser}.csv', 'w') as file:
         writer = csv.writer(file)
