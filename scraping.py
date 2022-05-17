@@ -54,7 +54,7 @@ def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
     for page in range(1, amount_pages + 1):
         url = f'{url.split("page")[0]}page/{page}'
         site = requests.get(url=url, headers=HEADERS)
-        soup = BeautifulSoup(site.text, 'lxml')
+        soup = BeautifulSoup(site.text.encode('utf-8'), 'lxml')
         products = soup.find_all('div', class_='shop-cards')
         for product in products:
             try:
@@ -117,7 +117,7 @@ def menu_by_category(url, type_parser):
     create_dir(type_parser)
 
     site = requests.get(url=url, headers=HEADERS)
-    soup = BeautifulSoup(site.text, 'lxml')
+    soup = BeautifulSoup(site.text.encode('utf-8'), 'lxml')
     for category in soup.find_all('div', class_='col-xl-2 col-md-3 col-6'):
         url = category.find('a', class_='home-menu-items').get('href')
         title = url.split('/')[-2]
@@ -135,7 +135,7 @@ def menu_by_category(url, type_parser):
             )
 
         site_category = requests.get(url=url, headers=HEADERS)
-        soup = BeautifulSoup(site_category.text, 'lxml')
+        soup = BeautifulSoup(site_category.text.encode('utf-8'), 'lxml')
         try:
             amount_pages = int(soup.find_all('a', class_='page-numbers')[-2].text)
         except IndexError:
@@ -147,7 +147,7 @@ def menu_by_category(url, type_parser):
 @info
 def all_menu(url, type_parser):
     site = requests.get(url=url, headers=HEADERS)
-    soup = BeautifulSoup(site.text, 'lxml')
+    soup = BeautifulSoup(site.text.encode('utf-8'), 'lxml')
     amount_pages = int(soup.find_all('a', class_='page-numbers')[-2].text)
 
     create_dir(type_parser)
