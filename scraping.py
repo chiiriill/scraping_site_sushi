@@ -43,6 +43,8 @@ LANGUAGES = {
 
 
 def create_dir(type_parser):
+    """Creates folders if they don't exist"""
+
     if not os.path.exists('data'):
         os.mkdir('data')
 
@@ -51,6 +53,8 @@ def create_dir(type_parser):
 
 
 def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
+    """Adds products to csv file"""
+
     for page in range(1, amount_pages + 1):
         url = f'{url.split("page")[0]}page/{page}'
         site = requests.get(url=url, headers=HEADERS)
@@ -99,6 +103,8 @@ def update_csv_file_new_dishes(url, amount_pages, type_parser, title):
 
 
 def info(func):
+    """Decorator function, monitors the progress of the program"""
+
     def inner(url, type_parser):
         print(f'\033[35m{LANGUAGES[lang]["start_process"]}')
         start_time = time.time()
@@ -114,8 +120,9 @@ def info(func):
 
 @info
 def menu_by_category(url, type_parser):
-    create_dir(type_parser)
+    """Responsible for parsing by category"""
 
+    create_dir(type_parser)
     site = requests.get(url=url, headers=HEADERS)
     soup = BeautifulSoup(site.text.encode('utf-8'), 'lxml')
     for category in soup.find_all('div', class_='col-xl-2 col-md-3 col-6'):
@@ -146,6 +153,8 @@ def menu_by_category(url, type_parser):
 
 @info
 def all_menu(url, type_parser):
+    """Responsible for parsing all menu"""
+
     site = requests.get(url=url, headers=HEADERS)
     soup = BeautifulSoup(site.text.encode('utf-8'), 'lxml')
     amount_pages = int(soup.find_all('a', class_='page-numbers')[-2].text)
@@ -167,6 +176,8 @@ def all_menu(url, type_parser):
 
 
 def interface():
+    """Console interface"""
+
     global lang
     lang = 'EN'
     print(f'\033[35m{text2art("MENU   SITE")}')
